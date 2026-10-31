@@ -661,9 +661,8 @@ html.qz-open{overflow:hidden}
       <fieldset class="qz-step" data-step="contato" hidden>
         <legend>Para finalizar, como podemos te chamar?</legend>
         <label class="qz-field"><span>Seu nome</span><input class="qz-input" type="text" name="nome" autocomplete="name" placeholder="Ex.: Maria da Silva"></label>
-        <label class="qz-field"><span>Seu WhatsApp (com DDD)</span><input class="qz-input" type="tel" name="telefone" inputmode="tel" autocomplete="tel" placeholder="Ex.: (87) 99999-9999"></label>
         <label class="qz-field"><span>Cidade / Estado</span><input class="qz-input" type="text" name="cidade" autocomplete="address-level2" placeholder="Ex.: Petrolina / PE"></label>
-        <p class="qz-err" id="qzContErr" hidden>Preencha seu nome, seu WhatsApp com DDD e sua cidade.</p>
+        <p class="qz-err" id="qzContErr" hidden>Preencha seu nome e sua cidade.</p>
         <p class="qz-privacy"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Seus dados são usados apenas para analisar o seu caso.</p>
       </fieldset>
 
@@ -776,14 +775,14 @@ document.querySelectorAll('a[href="#negado"]').forEach(a=>a.addEventListener("cl
   form.addEventListener("submit",e=>{e.preventDefault(); if(cur==="data") next.click();});
   next.addEventListener("click",()=>{ if(cur==="data"&&!val("data")){document.getElementById("qzDataErr").hidden=false;return;} go(); });
   back.addEventListener("click",()=>{ if(hist.length) show(hist.pop()); });
-  send.addEventListener("click",e=>{ if(!val("nome")||!val("cidade")||val("telefone").replace(/\D/g,"").length<10){e.preventDefault(); document.getElementById("qzContErr").hidden=false; return;} send.href=wa(msg()); salvar(); setTimeout(close,400); });
+  send.addEventListener("click",e=>{ if(!val("nome")||!val("cidade")){e.preventDefault(); document.getElementById("qzContErr").hidden=false; return;} send.href=wa(msg()); salvar(); setTimeout(close,400); });
   /* envia as respostas para a planilha do Google (não atrasa a abertura do WhatsApp) */
   function salvar(){
     const url=(typeof CONFIG!=="undefined"&&CONFIG.planilha)||""; if(!url) return;
     const fl=flow(), g=n=>fl.includes(n)?val(n):"";
     const b=val("bebe");
     const dados={
-      nome:val("nome"), telefone:val("telefone"), cidade:val("cidade"),
+      nome:val("nome"), telefone:"Não informado (veio pelo WhatsApp)", cidade:val("cidade"),
       carteira:val("carteira"), ultimo:g("ultimo"), seguro:g("seguro"),
       bebe:b, tipoData:b==="Estou gestante"?"Previsão do parto":"Nascimento do bebê", data:val("data"),
       inss:val("contribuiu"), rural:val("rural"), salmat:g("recebeu"), bolsa:val("bolsa"),
